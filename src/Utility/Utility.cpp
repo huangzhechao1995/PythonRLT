@@ -10,18 +10,18 @@
 
 int checkCores(int usecores, int verbose)
 {
-  int use_cores = ( (usecores > 1) ? usecores:1 );
+  // int use_cores = ( (usecores > 1) ? usecores:1 );
 
-  if (use_cores > 0) OMPMSG(1);
+  // if (use_cores > 0) OMPMSG(1);
 
-  int haveCores = omp_get_max_threads();
+  // int haveCores = omp_get_max_threads();
 
-  if(use_cores > haveCores)
-  {
-    if (verbose) Rprintf("Do not have %i cores, use maximum %i cores. \n", use_cores, haveCores);
-    use_cores = haveCores;
-  }
-  
+  // if(use_cores > haveCores)
+  // {
+  //   if (verbose) printf("Do not have %i cores, use maximum %i cores. \n", use_cores, haveCores);
+  //   use_cores = haveCores;
+  // }
+  int use_cores = 1;
   return(use_cores);
 }
 

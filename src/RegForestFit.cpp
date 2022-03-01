@@ -4,32 +4,31 @@
 //  **********************************
 
 // my header file
-# include "RLT.h"
 # include "Utility/Utility.h"
 # include "regForest.h"
+# include <iostream>
 
-using namespace Rcpp;
 using namespace arma;
 
 // [[Rcpp::export()]]
 List RegForestUniFit(arma::mat& X,
           					 arma::vec& Y,
           					 arma::uvec& Ncat,
-          					 List& param,
-          					 List& RLTparam,
+          					 PARAM_GLOBAL& param,
+          					 PARAM_RLT& RLTparam,
           					 arma::vec& obsweight,
           					 arma::vec& varweight,
           					 int usecores,
           					 int verbose,
           					 arma::umat& ObsTrack)
 {
-  DEBUG_Rcout << "/// THIS IS A DEBUG MODE OF RLT REGRESSION ///" << std::endl;
+  std::cout << "/// THIS IS A DEBUG MODE OF RLT REGRESSION ///" << std::endl;
 
   // check number of cores
   usecores = checkCores(usecores, verbose);
 
   // readin parameters 
-  PARAM_GLOBAL Param(param);
+  PARAM_GLOBAL Param = PARAM_GLOBAL(param);
   if (verbose) Param.print();
   PARAM_RLT Param_RLT(RLTparam);
   if (verbose and Param.reinforcement) Param_RLT.print();
@@ -73,39 +72,56 @@ List RegForestUniFit(arma::mat& X,
   uvec var_id = linspace<uvec>(0, P-1, P);
   
   // start to fit the model
-  Reg_Uni_Forest_Build((const RLT_REG_DATA&) REG_DATA,
-                       REG_FOREST,
-                       (const PARAM_GLOBAL&) Param,
-                       (const PARAM_RLT&) Param_RLT,
-                       obs_id,
-                       var_id,
-                       ObsTrack,
-                       Prediction,
-                       OOBPrediction,
-                       VarImp,
-                       seed,
-                       usecores,
-                       verbose);
+  // Reg_Uni_Forest_Build((const RLT_REG_DATA&) REG_DATA,
+  //                      REG_FOREST,
+  //                      (const PARAM_GLOBAL&) Param,
+  //                      (const PARAM_RLT&) Param_RLT,
+  //                      obs_id,
+  //                      var_id,
+  //                      ObsTrack,
+  //                      Prediction,
+  //                      OOBPrediction,
+  //                      VarImp,
+  //                      seed,
+  //                      usecores,
+  //                      verbose);
 
   List ReturnList;
   
-  List Forest_R;
+  Forest Forest_R;
   
-  Forest_R["NodeType"] = NodeType;
-  Forest_R["SplitVar"] = SplitVar;
-  Forest_R["SplitValue"] = SplitValue;
-  Forest_R["LeftNode"] = LeftNode;
-  Forest_R["RightNode"] = RightNode;
-  Forest_R["NodeSize"] = NodeSize;    
-  Forest_R["NodeAve"] = NodeAve;
+  Forest_R.NodeType = NodeType;
+  Forest_R.SplitVar = SplitVar;
+  Forest_R.SplitValue = SplitValue;
+  Forest_R.LeftNode = LeftNode;
+  Forest_R.RightNode = RightNode;
+  Forest_R.NodeSize = NodeSize;    
+  Forest_R.NodeAve = NodeAve;
   
-  ReturnList["FittedForest"] = Forest_R;
+  ReturnList.FittedForest = Forest_R;
   
-  if (obs_track) ReturnList["ObsTrack"] = ObsTrack;
-  if (importance) ReturnList["VarImp"] = VarImp;
+  if (obs_track) ReturnList.ObsTrack = ObsTrack;
+  if (importance) ReturnList.VarImp = VarImp;
   
-  ReturnList["Prediction"] = Prediction;
-  ReturnList["OOBPrediction"] = OOBPrediction;
+  ReturnList.Prediction = Prediction;
+  ReturnList.OOBPrediction = OOBPrediction;
 
   return ReturnList;
+}
+
+int main(){
+  int dummy=0;
+  std::cout<<dummy<<std::endl;
+  // arma::mat& dummy_X;
+  // arma::vec& dummy_Y;
+  // arma::uvec& dummy_Ncat;
+  // PARAM_GLOBAL& dummy_param;
+  // PARAM_RLT& dummy_RLTparam;
+  // arma::vec& dummy_obsweight;
+  // arma::vec& dummy_varweight;
+  // int dummy_usecores;
+  // int dummy_verbose;
+  // arma::umat& dummy_ObsTrack;
+  // List fit_result = RegForestUniFit(dummy_X, dummy_Y, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
+  
 }

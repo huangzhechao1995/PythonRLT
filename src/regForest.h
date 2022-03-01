@@ -4,18 +4,39 @@
 //  **********************************
 
 // my header file
-# include "RLT.h"
 # include "Trees//Trees.h"
 # include "Utility//Utility.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 #ifndef RegForest_Fun
 #define RegForest_Fun
 
-// univariate tree split functions 
+class Forest
+{
+  // Access specifier
+  public:
+    arma::field<arma::uvec> NodeType;
+    arma::field<arma::uvec> SplitVar;
+    arma::field<arma::vec> SplitValue;
+    arma::field<arma::uvec> LeftNode;
+    arma::field<arma::uvec> RightNode;
+    arma::field<arma::vec> NodeSize;
+    arma::field<arma::vec> NodeAve;
 
+};
+
+class List
+{
+  public:
+    Forest FittedForest;
+    vec Prediction;
+    vec OOBPrediction;
+    arma::umat ObsTrack;
+    vec VarImp;
+};
+
+// univariate tree split functions 
 List RegForestUniFit(mat& X,
           	         vec& Y,
           		     uvec& Ncat,

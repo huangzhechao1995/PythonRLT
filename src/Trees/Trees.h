@@ -5,11 +5,9 @@
 
 // my header file
 
-# include <RcppArmadillo.h>
-# include <Rcpp.h>
 # include <algorithm>
+# include <armadillo>
 
-using namespace Rcpp;
 using namespace arma;
 
 # include "Definition.h"
@@ -39,17 +37,17 @@ void Uni_Find_Terminal_Node_ShuffleJ(size_t Node,
                                      const vec& tildex,
                                      const size_t j);
 
-List ForestKernelUni(arma::field<arma::uvec>& NodeType,
-                     arma::field<arma::uvec>& SplitVar,
-                     arma::field<arma::vec>& SplitValue,
-                     arma::field<arma::uvec>& LeftNode,
-                     arma::field<arma::uvec>& RightNode,
-                     arma::field<arma::field<arma::uvec>>& NodeRegi,
-                     arma::mat& X,
-                     arma::uvec& Ncat,
-                     arma::vec& obsweight,
-                     int usecores,
-                     int verbose);
+// List ForestKernelUni(arma::field<arma::uvec>& NodeType,
+//                      arma::field<arma::uvec>& SplitVar,
+//                      arma::field<arma::vec>& SplitValue,
+//                      arma::field<arma::uvec>& LeftNode,
+//                      arma::field<arma::uvec>& RightNode,
+//                      arma::field<arma::field<arma::uvec>>& NodeRegi,
+//                      arma::mat& X,
+//                      arma::uvec& Ncat,
+//                      arma::vec& obsweight,
+//                      int usecores,
+//                      int verbose);
 
 
 // ************************//

@@ -5,10 +5,8 @@
 
 // my header file
 
-#include <RcppArmadillo.h>
-#include <Rcpp.h>
-
-using namespace Rcpp;
+#include <iostream> 
+#include <armadillo>
 using namespace arma;
 
 #define SurvWeightTH 1e-20
@@ -38,29 +36,47 @@ public:
   size_t seed;
   bool failcount;
   
-  PARAM_GLOBAL(List& param){
-    N             = param["n"];
-    P             = param["p"];
-    ntrees        = param["ntrees"];
-    mtry          = param["mtry"];
-    nmin          = param["nmin"];
-    alpha         = param["alpha"];
-    split_gen     = param["split.gen"];
-    split_rule    = param["split.rule"];
-    nsplit        = param["nsplit"];
-    replacement   = param["replacement"];
-    resample_prob = param["resample.prob"];  
-    useobsweight  = param["use.obs.w"];
-    usevarweight  = param["use.var.w"];    
-    varweighttype  = param["var.w.type"];    
-    importance    = param["importance"];
-    reinforcement = param["reinforcement"];
-    obs_track     = param["track.obs"];
-    seed          = param["seed"];
-    failcount     = param["failcount"];
+  PARAM_GLOBAL( size_t N,
+                size_t P,
+                size_t ntrees,
+                size_t mtry,
+                size_t nmin,
+                double alpha,
+                int split_gen,
+                int split_rule,
+                int nsplit,
+                bool replacement,
+                double resample_prob,
+                bool useobsweight,
+                bool usevarweight,
+                int varweighttype,
+                int importance,
+                bool reinforcement,
+                bool obs_track,
+                size_t seed,
+                bool failcount ){
+  N = N;
+  P = P;
+  ntrees = ntrees;
+  mtry = mtry;
+  nmin = nmin;
+  alpha = alpha;
+  split_gen = split_gen;
+  split_rule = split_rule;
+  nsplit = nsplit;
+  replacement = replacement;
+  resample_prob = resample_prob;
+  useobsweight = useobsweight;
+  usevarweight = usevarweight;
+  varweighttype = varweighttype;
+  importance = importance;  
+  reinforcement = reinforcement;
+  obs_track = obs_track;
+  seed = seed;
+  failcount = failcount;
   }
-  
-  copyfrom(const PARAM_GLOBAL& Input){
+
+  PARAM_GLOBAL(const PARAM_GLOBAL& Input){
       N             = Input.N;
       P             = Input.P;
       ntrees        = Input.ntrees;
@@ -81,23 +97,23 @@ public:
   }
   
   void print() {
-      Rcout << "--- Random Forest Parameters ---" << std::endl;
-      Rcout << "            N = " << N << std::endl;
-      Rcout << "            P = " << P << std::endl;
-      Rcout << "       ntrees = " << ntrees << std::endl;
-      Rcout << "         mtry = " << mtry << std::endl;
-      Rcout << "         nmin = " << nmin << std::endl;
-      Rcout << "        alpha = " << alpha << std::endl;
-      Rcout << "    split_gen = " << ((split_gen == 1) ? "Random" : (split_gen == 2) ? "Rank" : "Best") << std::endl;
-      if (split_gen < 3) Rcout << "   split_rule = " << split_rule << std::endl;
-      Rcout << "       nsplit = " << nsplit << std::endl;
-      Rcout << "  replacement = " << replacement << std::endl;
-      Rcout << "resample prob = " << resample_prob << std::endl;
-      Rcout << " useobsweight = " << (useobsweight ? "Yes" : "No") << std::endl;
-      Rcout << " usevarweight = " << (usevarweight ? "Yes" : "No") << std::endl;
-      Rcout << "   importance = " << (importance ? "Yes" : "No") << std::endl;
-      Rcout << "reinforcement = " << (reinforcement ? "Yes" : "No") << std::endl;
-      Rcout << std::endl;
+      std::cout << "--- Random Forest Parameters ---" << std::endl;
+      std::cout << "            N = " << N << std::endl;
+      std::cout << "            P = " << P << std::endl;
+      std::cout << "       ntrees = " << ntrees << std::endl;
+      std::cout << "         mtry = " << mtry << std::endl;
+      std::cout << "         nmin = " << nmin << std::endl;
+      std::cout << "        alpha = " << alpha << std::endl;
+      std::cout << "    split_gen = " << ((split_gen == 1) ? "Random" : (split_gen == 2) ? "Rank" : "Best") << std::endl;
+      if (split_gen < 3) std::cout << "   split_rule = " << split_rule << std::endl;
+      std::cout << "       nsplit = " << nsplit << std::endl;
+      std::cout << "  replacement = " << replacement << std::endl;
+      std::cout << "resample prob = " << resample_prob << std::endl;
+      std::cout << " useobsweight = " << (useobsweight ? "Yes" : "No") << std::endl;
+      std::cout << " usevarweight = " << (usevarweight ? "Yes" : "No") << std::endl;
+      std::cout << "   importance = " << (importance ? "Yes" : "No") << std::endl;
+      std::cout << "reinforcement = " << (reinforcement ? "Yes" : "No") << std::endl;
+      std::cout << std::endl;
   }
 };
 
@@ -110,24 +126,31 @@ public:
     size_t embed_split_gen;
     size_t embed_nsplit;    
     
-  PARAM_RLT(List& Param_RLT){
-      embed_ntrees        = Param_RLT["embed.ntrees"];
-      embed_resample_prob = Param_RLT["embed.resample.prob"];
-      embed_mtry_prop     = Param_RLT["embed.mtry.prop"];
-      embed_nmin          = Param_RLT["embed.nmin"];
-      embed_split_gen     = Param_RLT["embed.split.gen"];
-      embed_nsplit        = Param_RLT["embed.nsplit"];
+  PARAM_RLT(
+    size_t embed_ntrees,
+    double embed_resample_prob,
+    double embed_mtry_prop,
+    size_t embed_nmin,
+    size_t embed_split_gen,
+    size_t embed_nsplit 
+    ){
+      embed_ntrees        = embed_ntrees;
+      embed_resample_prob = embed_resample_prob;
+      embed_mtry_prop     = embed_mtry_prop;
+      embed_nmin          = embed_nmin;
+      embed_split_gen     = embed_split_gen;
+      embed_nsplit        = embed_nsplit;
   }
   
   void print() {
-      Rcout << "--- Embedded Model Parameters ---" << std::endl;
-      Rcout << "        embed_ntrees = " << embed_ntrees << std::endl;
-      Rcout << " embed_resample_prob = " << embed_resample_prob << std::endl;
-      Rcout << "     embed_mtry_prop = " << embed_mtry_prop << std::endl;
-      Rcout << "          embed_nmin = " << embed_nmin << std::endl;
-      Rcout << "     embed_split_gen = " << embed_split_gen << std::endl;
-      Rcout << "        embed_nsplit = " << embed_nsplit << std::endl;
-      Rcout << std::endl;
+      std::cout << "--- Embedded Model Parameters ---" << std::endl;
+      std::cout << "        embed_ntrees = " << embed_ntrees << std::endl;
+      std::cout << " embed_resample_prob = " << embed_resample_prob << std::endl;
+      std::cout << "     embed_mtry_prop = " << embed_mtry_prop << std::endl;
+      std::cout << "          embed_nmin = " << embed_nmin << std::endl;
+      std::cout << "     embed_split_gen = " << embed_split_gen << std::endl;
+      std::cout << "        embed_nsplit = " << embed_nsplit << std::endl;
+      std::cout << std::endl;
   }
   
 };
@@ -464,7 +487,7 @@ public:
   double score = -1;
   
   void print(void) {
-    Rcout << "Splitting varible is " << var << " value is " << value << " score is " << score << std::endl;
+    std::cout << "Splitting varible is " << var << " value is " << value << " score is " << score << std::endl;
   }
 };
 
@@ -482,7 +505,7 @@ public:
     double score = 0; // for sorting
     
     void print() {
-        Rcout << "Category is " << cat << " count is " << count << " weight is " << weight << " score is " << score << std::endl;
+        std::cout << "Category is " << cat << " count is " << count << " weight is " << weight << " score is " << score << std::endl;
     }
 };
 
@@ -497,7 +520,7 @@ public:
   }
   
   void print(void) {
-    Rcout << "Category is " << cat << " count is " << count << " weight is " << weight << " y sum is " << y << " score is " << score << std::endl;
+    std::cout << "Category is " << cat << " count is " << count << " weight is " << weight << " y sum is " << y << " score is " << score << std::endl;
   }
 };
 
@@ -517,12 +540,12 @@ public:
   }
   
   void print() {
-      Rcout << "Category is " << cat << " weight is " << weight << " count is " << count << " data is\n" << 
+      std::cout << "Category is " << cat << " weight is " << weight << " count is " << count << " data is\n" << 
                join_rows(FailCount, RiskCount) << std::endl;
   }
   
   void print_simple() {
-      Rcout << "Category is " << cat << " weight is " << weight << " count is " << count << std::endl;
+      std::cout << "Category is " << cat << " weight is " << weight << " count is " << count << std::endl;
   }  
 };
 
