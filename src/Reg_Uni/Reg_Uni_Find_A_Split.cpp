@@ -9,7 +9,6 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Find_A_Split(Uni_Split_Class& OneSplit,
@@ -37,7 +36,7 @@ void Reg_Uni_Find_A_Split(Uni_Split_Class& OneSplit,
   
   uvec var_try = arma::randperm(P, mtry);
   
-  DEBUG_Rcout << "    --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
+  std::cout << "    --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
 
   for (size_t j = 0; j < mtry; j++)
   {
@@ -80,7 +79,7 @@ void Reg_Uni_Find_A_Split(Uni_Split_Class& OneSplit,
                          alpha,
                          useobsweight);
       
-      DEBUG_Rcout << "    --- try var " << temp_var << " at cut " << TempSplit.value << " (continuous) with score " << TempSplit.score << std::endl;
+      std::cout << "    --- try var " << temp_var << " at cut " << TempSplit.value << " (continuous) with score " << TempSplit.score << std::endl;
     }
     
     if (TempSplit.score > OneSplit.score)

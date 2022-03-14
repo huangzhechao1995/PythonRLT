@@ -8,7 +8,6 @@
 # include "../Utility/Utility.h"
 # include "Trees.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Uni_Find_Terminal_Node(size_t Node, 
@@ -22,7 +21,7 @@ void Uni_Find_Terminal_Node(size_t Node,
  
  size_t size = proxy_id.n_elem;
   
-  DEBUG_Rcout << "/// Start at node ///" << Node << " n is " << size << std::endl;
+  std::cout << "/// Start at node ///" << Node << " n is " << size << std::endl;
   
   if (OneTree.NodeType[Node] == 3)
   {
@@ -98,7 +97,7 @@ void Uni_Find_Terminal_Node_ShuffleJ(size_t Node,
     
     size_t size = proxy_id.n_elem;
     
-    DEBUG_Rcout << "/// Start at node ///" << Node << " n is " << size << std::endl;
+    std::cout << "/// Start at node ///" << Node << " n is " << size << std::endl;
     
     if (OneTree.NodeType[Node] == 3)
     {

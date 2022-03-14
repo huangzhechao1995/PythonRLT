@@ -9,7 +9,6 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Split_Cont(Uni_Split_Class& TempSplit,
@@ -240,7 +239,7 @@ void reg_cont_score_best(uvec& indices,
                     double& temp_cut, 
                     double& temp_score)
 {
-  DEBUG_Rcout << "      --- Best score with no weights --- " << std::endl;
+  std::cout << "      --- Best score with no weights --- " << std::endl;
   
   double score = 0;
   
@@ -291,7 +290,7 @@ void reg_cont_score_best_w(uvec& indices,
                       double& temp_score,
                       const vec& obs_weight)
 {
-  DEBUG_Rcout << "      --- Best score with weights --- " << std::endl;
+  std::cout << "      --- Best score with weights --- " << std::endl;
   double score = 0;
   
   size_t N = indices.size();

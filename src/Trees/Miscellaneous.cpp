@@ -7,7 +7,6 @@
 # include "../Utility/Utility.h"
 # include "Trees.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 // tree arrange functions
@@ -215,7 +214,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
   uvec goright(ncat + 1, fill::zeros); // the first (0-th) element (category) of goright will always be set to 0 --- go left, but this category does not exist.
   unpack(value, ncat + 1, goright);
 
-  DEBUG_Rcout << "    --- at split_id_cat, value is" <<  value << " ncat is " << ncat << ", goright is " << goright << " (continuous)" << std::endl;
+  std::cout << "    --- at split_id_cat, value is" <<  value << " ncat is " << ncat << ", goright is " << goright << " (continuous)" << std::endl;
   
   size_t RightN = obs_id.n_elem - 1;
   size_t LeftN = 0;
@@ -223,7 +222,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
   
   while( i <= RightN ){
     
-    // DEBUG_Rcout << "    --- subject " << obs_id(i) << ", cat is " << x(obs_id(i)) << std::endl;
+    // std::cout << "    --- subject " << obs_id(i) << ", cat is " << x(obs_id(i)) << std::endl;
     
     if ( goright[x(obs_id(i))] == 0 )
     {
@@ -247,7 +246,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
 
 void field_vec_resize(arma::field<arma::vec>& A, size_t size)
 {
-  DEBUG_Rcout << " resize tree from size " << A.n_elem << " to size " << size << std::endl;
+  std::cout << " resize tree from size " << A.n_elem << " to size " << size << std::endl;
   arma::field<arma::vec> B(size);
   
   size_t common_size = (A.n_elem > size) ? size : A.n_elem;
@@ -262,12 +261,12 @@ void field_vec_resize(arma::field<arma::vec>& A, size_t size)
   {
     A[i] = vec(B[i].begin(), B[i].size(), false, true);
   }
-  DEBUG_Rcout << " done resize " << std::endl;
+  std::cout << " done resize " << std::endl;
 }
 
 void field_vec_resize(arma::field<arma::uvec>& A, size_t size)
 {
-  DEBUG_Rcout << " resize tree from size " << A.n_elem << " to size " << size << std::endl;
+  std::cout << " resize tree from size " << A.n_elem << " to size " << size << std::endl;
   arma::field<arma::uvec> B(size);
   
   size_t common_size = (A.n_elem > size) ? size : A.n_elem;
@@ -282,7 +281,7 @@ void field_vec_resize(arma::field<arma::uvec>& A, size_t size)
   {
     A[i] = uvec(B[i].begin(), B[i].size(), false, true);
   }
-  DEBUG_Rcout << " done resize " << std::endl;
+  std::cout << " done resize " << std::endl;
 }
 
 // for categorical variables
@@ -327,7 +326,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Surv_Cat_Cl
     if (true_cat == 2) //nothing we can do
         return; 
     
-    DEBUG_Rcout << "        --- start moving index with lowindex " << lowindex << " highindex " << highindex << std::endl;
+    std::cout << "        --- start moving index with lowindex " << lowindex << " highindex " << highindex << std::endl;
     
     lowindex = 0;
     highindex = true_cat-2;
@@ -348,20 +347,20 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Surv_Cat_Cl
         if ( lowindex > highindex ) lowindex = highindex;
         
         return;
-        DEBUG_Rcout << "        --- case 1 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+        std::cout << "        --- case 1 with lowindex " << lowindex << " highindex " << highindex << std::endl;
     }
     
     if ( lowcount >= nmin and highcount < nmin ) // only need to fix highindex
     {
         while( highcount < nmin and lowindex <= highindex ){
-            DEBUG_Rcout << "        --- adding " << cat_reduced[highindex].count << " count to highcount " << highcount << std::endl;
+            std::cout << "        --- adding " << cat_reduced[highindex].count << " count to highcount " << highcount << std::endl;
             highcount += cat_reduced[highindex].count;
             highindex--;
         }
         
         if (highindex < lowindex or highindex > true_cat - 2 ) highindex = lowindex; // sometimes highindex will be negative and turned into very large number 
         
-        DEBUG_Rcout << "        --- case 2 with lowindex " << lowindex << " highindex " << highindex << std::endl;    
+        std::cout << "        --- case 2 with lowindex " << lowindex << " highindex " << highindex << std::endl;    
         
         return;
     }
@@ -384,7 +383,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Surv_Cat_Cl
             
             if (highindex < lowindex or highindex > true_cat - 2 ) highindex = lowindex;
             
-            DEBUG_Rcout << "        --- case 3 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+            std::cout << "        --- case 3 with lowindex " << lowindex << " highindex " << highindex << std::endl;
             return;
             
         }else{ // fix highindex first
@@ -402,7 +401,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Surv_Cat_Cl
             
             if (lowindex > highindex) lowindex = highindex;
             
-            DEBUG_Rcout << "        --- case 4 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+            std::cout << "        --- case 4 with lowindex " << lowindex << " highindex " << highindex << std::endl;
             return;
         }
     }
@@ -417,7 +416,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Reg_Cat_Cla
     if (true_cat == 2) //nothing we can do
         return; 
     
-    DEBUG_Rcout << "        --- start moving index with lowindex " << lowindex << " highindex " << highindex << std::endl;
+    std::cout << "        --- start moving index with lowindex " << lowindex << " highindex " << highindex << std::endl;
 
     size_t lowcount = cat_reduced[0].count;
     size_t highcount = cat_reduced[true_cat-1].count;
@@ -436,20 +435,20 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Reg_Cat_Cla
         if ( lowindex > highindex ) lowindex = highindex;
         
         return;
-        DEBUG_Rcout << "        --- case 1 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+        std::cout << "        --- case 1 with lowindex " << lowindex << " highindex " << highindex << std::endl;
     }
     
     if ( lowcount >= nmin and highcount < nmin ) // only need to fix highindex
     {
         while( highcount < nmin and lowindex <= highindex ){
-            DEBUG_Rcout << "        --- adding " << cat_reduced[highindex].count << " count to highcount " << highcount << std::endl;
+            std::cout << "        --- adding " << cat_reduced[highindex].count << " count to highcount " << highcount << std::endl;
             highcount += cat_reduced[highindex].count;
             highindex--;
         }
         
         if (highindex < lowindex or highindex > true_cat - 2 ) highindex = lowindex; // sometimes highindex will be negative and turned into very large number 
         
-        DEBUG_Rcout << "        --- case 2 with lowindex " << lowindex << " highindex " << highindex << std::endl;    
+        std::cout << "        --- case 2 with lowindex " << lowindex << " highindex " << highindex << std::endl;    
         
         return;
     }
@@ -472,7 +471,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Reg_Cat_Cla
             
             if (highindex < lowindex or highindex > true_cat - 2 ) highindex = lowindex;
             
-            DEBUG_Rcout << "        --- case 3 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+            std::cout << "        --- case 3 with lowindex " << lowindex << " highindex " << highindex << std::endl;
             return;
             
         }else{ // fix highindex first
@@ -490,7 +489,7 @@ void move_cat_index(size_t& lowindex, size_t& highindex, std::vector<Reg_Cat_Cla
             
             if (lowindex > highindex) lowindex = highindex;
             
-            DEBUG_Rcout << "        --- case 4 with lowindex " << lowindex << " highindex " << highindex << std::endl;
+            std::cout << "        --- case 4 with lowindex " << lowindex << " highindex " << highindex << std::endl;
             return;
         }
     }

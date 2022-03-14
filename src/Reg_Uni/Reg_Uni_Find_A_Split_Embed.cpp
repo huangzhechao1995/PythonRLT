@@ -9,7 +9,7 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
+
 using namespace arma;
 
 void Reg_Uni_Find_A_Split_Embed(Uni_Split_Class& OneSplit,
@@ -20,7 +20,7 @@ void Reg_Uni_Find_A_Split_Embed(Uni_Split_Class& OneSplit,
                                 uvec& var_id)
 {
   
-  Rcout << "    --- Reg_Find_A_Split with embedded model " << std::endl;
+  std::cout << "    --- Reg_Find_A_Split with embedded model " << std::endl;
   
   PARAM_GLOBAL Embed_Param = Param;
 

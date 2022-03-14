@@ -7,6 +7,9 @@
 # include "Utility/Utility.h"
 # include "regForest.h"
 # include <iostream>
+# include "Trees/Definition.h"
+# include <string>
+# include "cindex.cpp"
 
 using namespace arma;
 
@@ -71,20 +74,20 @@ List RegForestUniFit(arma::mat& X,
   uvec obs_id = linspace<uvec>(0, N-1, N);
   uvec var_id = linspace<uvec>(0, P-1, P);
   
-  // start to fit the model
-  // Reg_Uni_Forest_Build((const RLT_REG_DATA&) REG_DATA,
-  //                      REG_FOREST,
-  //                      (const PARAM_GLOBAL&) Param,
-  //                      (const PARAM_RLT&) Param_RLT,
-  //                      obs_id,
-  //                      var_id,
-  //                      ObsTrack,
-  //                      Prediction,
-  //                      OOBPrediction,
-  //                      VarImp,
-  //                      seed,
-  //                      usecores,
-  //                      verbose);
+  //start to fit the model
+  Reg_Uni_Forest_Build((const RLT_REG_DATA&) REG_DATA,
+                       REG_FOREST,
+                       (const PARAM_GLOBAL&) Param,
+                       (const PARAM_RLT&) Param_RLT,
+                       obs_id,
+                       var_id,
+                       ObsTrack,
+                       Prediction,
+                       OOBPrediction,
+                       VarImp,
+                       seed,
+                       usecores,
+                       verbose);
 
   List ReturnList;
   
@@ -111,17 +114,61 @@ List RegForestUniFit(arma::mat& X,
 
 int main(){
   int dummy=0;
+
+  // from 
+  int trainn = 500;
+  int testn = 1000;
+  int n = trainn + testn;
+  int p = 100;
+  //int X1 = matrix(rnorm(n*p/2), n, p/2)
+  int ntrees = 200;
+  int ncores = 10;
+  int nmin = 20;
+  int mtry = p;
+  double sampleprob = 0.85;
+  std::string rule = "best";
+  int nsplit = 0;
+  int importance = 1; 
   std::cout<<dummy<<std::endl;
-  // arma::mat& dummy_X;
-  // arma::vec& dummy_Y;
-  // arma::uvec& dummy_Ncat;
-  // PARAM_GLOBAL& dummy_param;
-  // PARAM_RLT& dummy_RLTparam;
-  // arma::vec& dummy_obsweight;
-  // arma::vec& dummy_varweight;
-  // int dummy_usecores;
-  // int dummy_verbose;
-  // arma::umat& dummy_ObsTrack;
-  // List fit_result = RegForestUniFit(dummy_X, dummy_Y, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
+
+  arma::mat dummy_X = arma::mat(n, p, fill::randu);
+  arma::vec dummy_Y = arma::vec(n, fill::randu);
+  arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
+  PARAM_GLOBAL dummy_param(n,
+                            p,
+                            ntrees,
+                            mtry,
+                            nmin,
+                            0.0, //default
+                            1,
+                            1,
+                            nsplit,
+                            true,
+                            sampleprob,
+                            false,
+                            false,
+                            1,
+                            1,
+                            false,
+                            false,
+                            312,
+                            false);
+
+    
+  PARAM_RLT dummy_RLTparam(
+    1,
+    0.75,
+    0.33,
+    1,
+    1 ,
+    1
+    );
+
+  arma::vec dummy_obsweight;
+  arma::vec dummy_varweight;
+  int dummy_usecores;
+  int dummy_verbose;
+  arma::umat dummy_ObsTrack;
+  List fit_result = RegForestUniFit(dummy_X, dummy_Y, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
   
 }

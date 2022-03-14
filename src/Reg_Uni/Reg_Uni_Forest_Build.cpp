@@ -9,10 +9,9 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-#include <xoshiro.h>
-#include <dqrng_distribution.h>
+//#include <xoshiro.h>
+//#include <dqrng_distribution.h>
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Forest_Build(const RLT_REG_DATA& REG_DATA,

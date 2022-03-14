@@ -8,7 +8,6 @@
 # include "Trees//Trees.h"
 # include "Utility/Utility.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 // [[Rcpp::export()]]
@@ -17,7 +16,7 @@ double cindex_d(arma::vec& Y,
               arma::vec& pred)
 {
 
-  DEBUG_Rcout << "-- calculate cindex (int Y) " << std::endl;
+  std::cout << "-- calculate cindex (int Y) " << std::endl;
   size_t P = 0;
   double C = 0;
   
@@ -88,7 +87,7 @@ double cindex_i(arma::uvec& Y,
               arma::vec& pred)
 {
   
-  DEBUG_Rcout << "-- calculate cindex (int Y) " << std::endl;
+  std::cout << "-- calculate cindex (int Y) " << std::endl;
   size_t P = 0;
   double C = 0;
   

@@ -9,7 +9,6 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Forest_Pred(mat& Pred,

@@ -9,7 +9,6 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Split_A_Node(size_t Node,
@@ -29,12 +28,12 @@ void Reg_Uni_Split_A_Node(size_t Node,
   {
 TERMINATENODE:
 
-    DEBUG_Rcout << "  -- Terminate node " << Node << std::endl;
+    std::cout << "  -- Terminate node " << Node << std::endl;
     Reg_Uni_Terminate_Node(Node, OneTree, obs_id, REG_DATA.Y, REG_DATA.obsweight, Param, useobsweight);
     
   }else{
     
-    DEBUG_Rcout << "  -- Do split" << std::endl;
+    std::cout << "  -- Do split" << std::endl;
     
     Uni_Split_Class OneSplit;
     
@@ -45,7 +44,7 @@ TERMINATENODE:
       Reg_Uni_Find_A_Split(OneSplit, REG_DATA, Param, Param_RLT, obs_id, var_id);
     }
     
-    DEBUG_Rcout << "  -- Found split on variable " << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
+    std::cout << "  -- Found split on variable " << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
     OneTree.NodeAve(Node) = arma::mean(REG_DATA.Y(obs_id));
     // if did not find a good split, terminate
@@ -53,7 +52,7 @@ TERMINATENODE:
       goto TERMINATENODE;
       
     // construct indices for left and right nodes
-    DEBUG_Rcout << "  -- splitting value is " << OneSplit.value << std::endl;
+    std::cout << "  -- splitting value is " << OneSplit.value << std::endl;
     
     uvec left_id(obs_id.n_elem);
     
@@ -61,11 +60,11 @@ TERMINATENODE:
     {
       split_id(REG_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id);  
       
-      DEBUG_Rcout << "  -- select cont variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
+      std::cout << "  -- select cont variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }else{
       split_id_cat(REG_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, REG_DATA.Ncat(OneSplit.var));
       
-      DEBUG_Rcout << "  -- select cat variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
+      std::cout << "  -- select cat variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }
     
     // if this happens something about the splitting rule is wrong
@@ -77,7 +76,7 @@ TERMINATENODE:
     
     if ( OneTree.NodeType( OneTree.NodeType.size() - 2) > 0 )
     {
-      DEBUG_Rcout << "  ------------- extend tree length: this shouldn't happen ----------- " << std::endl;
+      std::cout << "  ------------- extend tree length: this shouldn't happen ----------- " << std::endl;
       
       // extend tree structure
       OneTree.extend();
@@ -90,8 +89,8 @@ TERMINATENODE:
     
     OneTree.find_next_nodes(NextLeft, NextRight);
     
-    DEBUG_Rcout << "  -- Next Left at " << NextLeft << std::endl;
-    DEBUG_Rcout << "  -- Next Right at " << NextRight << std::endl;
+    std::cout << "  -- Next Left at " << NextLeft << std::endl;
+    std::cout << "  -- Next Right at " << NextRight << std::endl;
     
     // record tree 
     
@@ -140,10 +139,10 @@ void Reg_Uni_Terminate_Node(size_t Node,
   
   if (useobsweight)
   {
-    // DEBUG_Rcout << "terminate weighted" << std::endl;
+    // std::cout << "terminate weighted" << std::endl;
     OneTree.NodeAve(Node) = arma::sum(Y(obs_id) % obs_weight(obs_id)) / arma::sum(obs_weight(obs_id));
   }else{
-    // DEBUG_Rcout << "terminate nonweighted" << std::endl;
+    // std::cout << "terminate nonweighted" << std::endl;
     OneTree.NodeAve(Node) = arma::mean(Y(obs_id));
   }
 

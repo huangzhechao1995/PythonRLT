@@ -9,7 +9,6 @@
 # include "../Utility/Utility.h"
 # include "../regForest.h"
 
-using namespace Rcpp;
 using namespace arma;
 
 void Reg_Uni_Split_Cat(Uni_Split_Class& TempSplit,
@@ -26,7 +25,7 @@ void Reg_Uni_Split_Cat(Uni_Split_Class& TempSplit,
                        double alpha,
                        bool useobsweight)
 {
-  DEBUG_Rcout << "        --- Reg_One_Split_Cat with ncat = " << ncat << std::endl;
+  std::cout << "        --- Reg_One_Split_Cat with ncat = " << ncat << std::endl;
   
   std::vector<Reg_Cat_Class> cat_reduced(ncat + 1);
   
@@ -106,7 +105,7 @@ void Reg_Uni_Split_Cat(Uni_Split_Class& TempSplit,
       else
         temp_score = reg_cat_score(cat_reduced, temp_cat, true_cat);
       
-      DEBUG_Rcout << "        --- temp_score " << temp_score << std::endl;
+      std::cout << "        --- temp_score " << temp_score << std::endl;
       
       if (temp_score > best_score)
       {      
@@ -126,11 +125,11 @@ void Reg_Uni_Split_Cat(Uni_Split_Class& TempSplit,
   if (best_score > TempSplit.score)
   {
     
-    DEBUG_Rcout << "        --- record best split with score " << best_score << " best cut at " << best_cat << " true_cat is " << true_cat << std::endl;
+    std::cout << "        --- record best split with score " << best_score << " best cut at " << best_cat << " true_cat is " << true_cat << std::endl;
     
     TempSplit.value = record_cat_split(cat_reduced, best_cat, true_cat, ncat);
     
-    DEBUG_Rcout << "        --- value is " << TempSplit.value << std::endl;  
+    std::cout << "        --- value is " << TempSplit.value << std::endl;  
     
     TempSplit.score = best_score;
     

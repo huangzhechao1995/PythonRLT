@@ -114,8 +114,6 @@ getOneTree(RLTfit, 1)
 
 
 
-
-
 ################# other features of RLT ##########################
 
 
