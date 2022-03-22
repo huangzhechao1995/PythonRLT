@@ -36,44 +36,47 @@ public:
   size_t seed;
   bool failcount;
   
-  PARAM_GLOBAL( size_t N,
-                size_t P,
-                size_t ntrees,
-                size_t mtry,
-                size_t nmin,
-                double alpha,
-                int split_gen,
-                int split_rule,
-                int nsplit,
-                bool replacement,
-                double resample_prob,
-                bool useobsweight,
-                bool usevarweight,
-                int varweighttype,
-                int importance,
-                bool reinforcement,
-                bool obs_track,
-                size_t seed,
-                bool failcount ){
-  N = N;
-  P = P;
-  ntrees = ntrees;
-  mtry = mtry;
-  nmin = nmin;
-  alpha = alpha;
-  split_gen = split_gen;
-  split_rule = split_rule;
-  nsplit = nsplit;
-  replacement = replacement;
-  resample_prob = resample_prob;
-  useobsweight = useobsweight;
-  usevarweight = usevarweight;
-  varweighttype = varweighttype;
-  importance = importance;  
-  reinforcement = reinforcement;
-  obs_track = obs_track;
-  seed = seed;
-  failcount = failcount;
+  PARAM_GLOBAL( size_t N_input,
+                size_t P_input,
+                size_t ntrees_input,
+                size_t mtry_input,
+                size_t nmin_input,
+                double alpha_input,
+                int split_gen_input,
+                int split_rule_input,
+                int nsplit_input,
+                bool replacement_input,
+                double resample_prob_input,
+                bool useobsweight_input,
+                bool usevarweight_input,
+                int varweighttype_input,
+                int importance_input,
+                bool reinforcement_input,
+                bool obs_track_input,
+                size_t seed_input,
+                bool failcount_input ){
+  N = N_input;
+  P = P_input;  
+  ntrees = ntrees_input;
+  mtry = mtry_input;
+  nmin = nmin_input;
+  alpha = alpha_input;
+  split_gen = split_gen_input;
+  split_rule = split_rule_input;
+  nsplit = nsplit_input;
+  replacement = replacement_input;
+  resample_prob = resample_prob_input;
+  useobsweight = useobsweight_input;
+  usevarweight = usevarweight_input;
+  varweighttype = varweighttype_input;
+  importance = importance_input;  
+  reinforcement = reinforcement_input;
+  obs_track = obs_track_input;
+  seed = seed_input;
+
+  std::cout<< "before initialization dummy_param.failcount" <<failcount<<std::endl;  
+  failcount = failcount_input;
+  std::cout<< "during initialization dummy_param.failcount" <<failcount<<std::endl;  
   }
 
   PARAM_GLOBAL(const PARAM_GLOBAL& Input){

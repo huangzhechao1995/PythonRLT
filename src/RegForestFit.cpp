@@ -17,8 +17,8 @@ using namespace arma;
 List RegForestUniFit(arma::mat& X,
           					 arma::vec& Y,
           					 arma::uvec& Ncat,
-          					 PARAM_GLOBAL& param,
-          					 PARAM_RLT& RLTparam,
+          					 PARAM_GLOBAL& Param,
+          					 PARAM_RLT& Param_RLT,
           					 arma::vec& obsweight,
           					 arma::vec& varweight,
           					 int usecores,
@@ -27,13 +27,16 @@ List RegForestUniFit(arma::mat& X,
 {
   std::cout << "/// THIS IS A DEBUG MODE OF RLT REGRESSION ///" << std::endl;
 
+  std::cout<<Param.N <<Param.P << std::endl;
+
   // check number of cores
   usecores = checkCores(usecores, verbose);
 
   // readin parameters 
-  PARAM_GLOBAL Param = PARAM_GLOBAL(param);
+  // param.print();
+  // PARAM_GLOBAL Param = param;
   if (verbose) Param.print();
-  PARAM_RLT Param_RLT(RLTparam);
+  // PARAM_RLT Param_RLT = RLTparam;
   if (verbose and Param.reinforcement) Param_RLT.print();
 
   // create data objects  
@@ -112,16 +115,16 @@ List RegForestUniFit(arma::mat& X,
   return ReturnList;
 }
 
-int main(){
-  int dummy=0;
+
+int pythonInterface(int trainn, int testn, int p, int ntrees){
 
   // from 
-  int trainn = 500;
-  int testn = 1000;
+  // int trainn = 500;
+  // int testn = 1000;
   int n = trainn + testn;
-  int p = 100;
+  // int p = 100;
   //int X1 = matrix(rnorm(n*p/2), n, p/2)
-  int ntrees = 200;
+  // int ntrees = 200;
   int ncores = 10;
   int nmin = 20;
   int mtry = p;
@@ -129,12 +132,11 @@ int main(){
   std::string rule = "best";
   int nsplit = 0;
   int importance = 1; 
-  std::cout<<dummy<<std::endl;
 
   arma::mat dummy_X = arma::mat(n, p, fill::randu);
   arma::vec dummy_Y = arma::vec(n, fill::randu);
   arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
-  PARAM_GLOBAL dummy_param(n,
+  PARAM_GLOBAL dummy_param = PARAM_GLOBAL( n,
                             p,
                             ntrees,
                             mtry,
@@ -153,9 +155,10 @@ int main(){
                             false,
                             312,
                             false);
-
+  std::cout<< "dummy_param.N: " <<dummy_param.N<<std::endl;
+  std::cout<< "dummy_param.P: " <<dummy_param.P<<std::endl;
     
-  PARAM_RLT dummy_RLTparam(
+  PARAM_RLT dummy_RLTparam = PARAM_RLT(
     1,
     0.75,
     0.33,
@@ -163,6 +166,8 @@ int main(){
     1 ,
     1
     );
+  
+  std::cout<< "dummy_RLTparam.embed_ntrees" <<dummy_RLTparam.embed_ntrees<<std::endl;
 
   arma::vec dummy_obsweight;
   arma::vec dummy_varweight;
@@ -171,4 +176,16 @@ int main(){
   arma::umat dummy_ObsTrack;
   List fit_result = RegForestUniFit(dummy_X, dummy_Y, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
   
+  return 0;
 }
+
+int pythonInterfaceClass::pythonCall(int trainn, int testn, int p, int ntrees){
+  pythonInterface(trainn, testn, p, ntrees);
+  return 0;
+}
+
+int main(){
+    pythonInterfaceClass interf = pythonInterfaceClass();
+    interf.pythonCall(1000, 500, 100, 200);
+}
+

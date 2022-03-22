@@ -1,0 +1,23 @@
+project(RLT CXX)
+cmake_minimum_required(VERSION 2.8.3)
+
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BUILD_TYPE "Release")
+
+add_subdirectory(src)
+if(APPLE)
+	find_library(BLASLAPACK Accelerate REQUIRED)
+	if(NOT BLASLAPACK)
+		message(FATAL_ERROR "Mac OS X: framework Accelerate not found!")
+	endif()
+else()
+    find_package(BLAS REQUIRED)
+    find_package(LAPACK REQUIRED)
+    set(BLASLAPACK ${LAPACK_LIBRARIES})
+    if(NOT BLASLAPACK)
+        message(FATAL_ERROR "BLAS and LAPACK not found!")
+    endif()
+endif()
+
+find_package(Armadillo REQUIRED)

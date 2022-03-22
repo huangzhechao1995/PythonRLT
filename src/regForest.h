@@ -203,5 +203,9 @@ void Reg_Uni_Forest_Pred(mat& Pred,
                          const uvec& treeindex,
                          int usecores,
                          int verbose);
-
+                         
+class pythonInterfaceClass{      
+  public:            
+  int pythonCall(int trainn, int testn, int p, int ntrees);
+};
 #endif
