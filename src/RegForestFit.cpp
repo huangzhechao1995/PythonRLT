@@ -136,7 +136,7 @@ int pythonInterface(int trainn, int testn, int p, int ntrees){
   arma::mat dummy_X = arma::mat(n, p, fill::randu);
   arma::vec dummy_Y = arma::vec(n, fill::randu);
   arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
-  return importance;
+  //return importance;
   PARAM_GLOBAL dummy_param = PARAM_GLOBAL( n,
                             p,
                             ntrees,

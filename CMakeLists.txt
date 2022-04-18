@@ -40,13 +40,16 @@ message(STATUS "ARMADILLO_INCLUDE_DIR is ${ARMADILLO_INCLUDE_DIR}")
 #)
 #target_link_libraries(cmake_example ${ARMADILLO_LIBRARIES})
 
-pybind11_add_module(cmake_example SHARED ${SOURCES})
+pybind11_add_module(cmake_example MODULE ${SOURCES} )
 
-#target_include_directories(
-#    cmake_example
-#    PUBLIC
-#    ${ARMADILLO_INCLUDE_DIR}
-#)
+target_link_libraries(cmake_example PRIVATE ${ARMADILLO_LIBRARIES})
+
+target_include_directories(
+    cmake_example
+    PUBLIC
+    ${SOURCE}
+    ${ARMADILLO_INCLUDE_DIR}
+)
 #target_link_libraries(cmake_example ${ARMADILLO_INCLUDE_DIR})
 
 
