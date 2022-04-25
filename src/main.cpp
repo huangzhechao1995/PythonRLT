@@ -44,9 +44,16 @@ py::array_t<double> pythonRegWithGivenXY(py::array_t<double>& trainx, py::array_
     arma::vec vec_testy = arma::vec(ptr_testy, buf_testy.shape[0], true, false);
 
     pythonInterfaceClass pythonFriend = pythonInterfaceClass();
-    auto result = py::array_t<double>(buf_trainx.size);
+
+
     arma::vec prediction = pythonFriend.pythonCallWithGivenTrainTestData(mat_trainx, vec_trainy, mat_testx, vec_testy, ntrees);
+    double* prediction_mem = prediction.memptr();
+    auto result = py::array_t<double>(buf_trainy.size);
+    py::buffer_info buf_result = result.request();
+    buf_result.ptr = (double*)prediction.memptr();
+
     std::cout << "number of elements in prediction: "<< prediction.n_elem<< std::endl;
+
     return result;
 }
 
