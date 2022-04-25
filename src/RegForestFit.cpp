@@ -116,7 +116,7 @@ List RegForestUniFit(arma::mat& X,
 }
 
 
-int pythonInterface(int trainn, int testn, int p, int ntrees){
+int pythonInterfaceWithRandomData(int trainn, int testn, int p, int ntrees){
   // from 
   // int trainn = 500;
   // int testn = 1000;
@@ -176,14 +176,93 @@ int pythonInterface(int trainn, int testn, int p, int ntrees){
   int dummy_verbose;
   arma::umat dummy_ObsTrack;
   List fit_result = RegForestUniFit(dummy_X, dummy_Y, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
-  
-  return dummy_param.N;
+
+
+  return n;
 }
 
-int pythonInterfaceClass::pythonCall(int trainn, int testn, int p, int ntrees){
-  int result = pythonInterface(trainn, testn, p, ntrees);
+arma::vec pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
+  // from
+  // int trainn = 500;
+  // int testn = 1000;
+
+
+  // int p = 100;
+  //int X1 = matrix(rnorm(n*p/2), n, p/2)
+  // int ntrees = 200;
+
+  int trainn = trainx.n_rows;
+  int testn = testx.n_rows;
+  int p = trainx.n_cols;
+  int n = trainn + testn;
+  std::cout<<n<<std::endl;
+  int ncores = 10;
+  int nmin = 20;
+  int mtry = p;
+  double sampleprob = 0.85;
+  std::string rule = "best";
+  int nsplit = 0;
+  int importance = 1;
+
+//  arma::mat dummy_X = arma::mat(n, p, fill::randu);
+//  arma::vec dummy_Y = arma::vec(n, fill::randu);
+  arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
+  //return importance;
+  PARAM_GLOBAL dummy_param = PARAM_GLOBAL( n,
+                            p,
+                            ntrees,
+                            mtry,
+                            nmin,
+                            0.0, //default
+                            1,
+                            1,
+                            nsplit,
+                            true,
+                            sampleprob,
+                            false,
+                            false,
+                            1,
+                            1,
+                            false,
+                            false,
+                            312,
+                            false);
+  std::cout<< "dummy_param.N: " <<dummy_param.N<<std::endl;
+  std::cout<< "dummy_param.P: " <<dummy_param.P<<std::endl;
+
+  PARAM_RLT dummy_RLTparam = PARAM_RLT(
+    1,
+    0.75,
+    0.33,
+    1,
+    1 ,
+    1
+    );
+
+  std::cout<< "dummy_RLTparam.embed_ntrees" <<dummy_RLTparam.embed_ntrees<<std::endl;
+
+  arma::vec dummy_obsweight;
+  arma::vec dummy_varweight;
+  int dummy_usecores;
+  int dummy_verbose;
+  arma::umat dummy_ObsTrack;
+  List fit_result = RegForestUniFit(trainx, trainy, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
+
+  return fit_result.Prediction;
+}
+
+//------
+
+int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int testn, int p, int ntrees){
+  int result = pythonInterfaceWithRandomData(trainn, testn, p, ntrees);
   return result;
 }
+
+arma::vec pythonInterfaceClass::pythonCallWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
+  arma::vec result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, testx, testy, ntrees);
+  return result;
+}
+
 
 //int main(){
 //    pythonInterfaceClass interf = pythonInterfaceClass();
