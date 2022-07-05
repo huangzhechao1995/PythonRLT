@@ -1,3 +1,10 @@
+# reinforcement learning trees python pacakge
+command to install the RLT python package: 
+```pip3 install cmake_example/.```
+
+example command to run the RLT python package
+```python3 toy.py```
+
 # cmake_example for pybind11
 
 [![Gitter][gitter-badge]][gitter-link]
