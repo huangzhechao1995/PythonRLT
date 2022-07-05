@@ -6,8 +6,10 @@
 // my header file
 # include "Trees//Trees.h"
 # include "Utility//Utility.h"
+#include <pybind11/numpy.h>
 
 using namespace arma;
+namespace py = pybind11;
 
 #ifndef RegForest_Fun
 #define RegForest_Fun
@@ -23,13 +25,36 @@ class Forest
     arma::field<arma::uvec> RightNode;
     arma::field<arma::vec> NodeSize;
     arma::field<arma::vec> NodeAve;
-
 };
 
 class List
 {
   public:
+    // member
     Forest FittedForest;
+    vec Prediction;
+    vec OOBPrediction;
+    arma::umat ObsTrack;
+    vec VarImp;
+
+    // getter
+    py::array_t<double> getPrediction();
+    py::array_t<double> getOOBPrediction();
+    py::array_t<double> getVarImp();
+    // getter for Forest instance
+    // py::array_t<double> getNodeType();
+    // py::array_t<double> getSplitVar();
+    // py::array_t<double> getSplitValue();
+    // py::array_t<double> getLeftNode();
+    // py::array_t<double> getRightNode();
+    // py::array_t<double> getNodeSize();
+    // py::array_t<double> getNodeAve();
+
+};
+
+class SimplifiedList
+{
+  public:
     vec Prediction;
     vec OOBPrediction;
     arma::umat ObsTrack;
@@ -209,5 +234,7 @@ class pythonInterfaceClass{
   int pythonCallWithRandomData(int trainn, int testn, int p, int ntrees);
   //int pythonCallwithGivenTrainTestData(double* trainx, double* trainy, double* testx, double *testy, int ntrees);
   arma::vec pythonCallWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees);
+  List pythonCallWithGivenTrainTestDataReturnList(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees);
+
 };
 #endif

@@ -15,3 +15,9 @@ testY = np.array([11,8]).astype("double")
 
 result = cmake_example.pythonRegWithGivenXY(trainX, trainY, testX, testY, 2)
 print(result)
+
+
+result = cmake_example.pythonRegWithGivenXYReturnList(trainX, trainY, testX, testY, 2)
+print("variable Importance:", result.getVarImp())
+print("prediction:", result.getPrediction())
+print("OOB prediction:", result.getOOBPrediction())

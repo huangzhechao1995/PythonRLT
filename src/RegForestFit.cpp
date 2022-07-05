@@ -181,7 +181,7 @@ int pythonInterfaceWithRandomData(int trainn, int testn, int p, int ntrees){
   return n;
 }
 
-arma::vec pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
+List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
   // from
   // int trainn = 500;
   // int testn = 1000;
@@ -248,7 +248,7 @@ arma::vec pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trai
   arma::umat dummy_ObsTrack;
   List fit_result = RegForestUniFit(trainx, trainy, dummy_Ncat, dummy_param, dummy_RLTparam, dummy_obsweight, dummy_varweight, dummy_usecores, dummy_verbose, dummy_ObsTrack);
 
-  return fit_result.Prediction;
+  return fit_result;
 }
 
 //------
@@ -259,9 +259,22 @@ int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int testn, int p,
 }
 
 arma::vec pythonInterfaceClass::pythonCallWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
-  arma::vec result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, testx, testy, ntrees);
+  List result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, testx, testy, ntrees);
+  arma::vec prediction = result.Prediction;
+  return prediction;
+}
+
+List pythonInterfaceClass::pythonCallWithGivenTrainTestDataReturnList(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees){
+  List result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, testx, testy, ntrees);
+  // SimplifiedList simplifiedResult;
+  // simplifiedResult.Prediction = result.Prediction;
+  // simplifiedResult.OOBPrediction = result.OOBPrediction;
+  // simplifiedResult.ObsTrack = result.ObsTrack;
+  // simplifiedResult.VarImp = result.VarImp;
   return result;
 }
+
+
 
 
 //int main(){
