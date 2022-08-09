@@ -45,6 +45,10 @@ List pythonRegWithGivenXYReturnList(py::array_t<double> &trainx, py::array_t<dou
     arma::mat mat_testx = arma::mat(ptr_testx, buf_testx.shape[0], buf_testx.shape[1], true, false);
     arma::vec vec_testy = arma::vec(ptr_testy, buf_testy.shape[0], true, false);
 
+    // verification
+    std::cout << "train y mean in C++" << arma::sum(vec_trainy) << std::endl;
+    std::cout << "test y mean in C++" << arma::sum(vec_testy) << std::endl;
+
     pythonInterfaceClass pythonFriend = pythonInterfaceClass();
 
     List result = pythonFriend.pythonCallWithGivenTrainTestDataReturnList(mat_trainx, vec_trainy, mat_testx, vec_testy, ntrees);
@@ -69,7 +73,14 @@ py::array_t<double> List::getOOBPrediction()
     buf_result.ptr = (double *)OOBPrediction.memptr();
     return result;
 }
-
+py::array_t<double> List::getTestPrediction()
+{
+    double *prediction_mem = TestPrediction.memptr();
+    auto result = py::array_t<double>(TestPrediction.size());
+    py::buffer_info buf_result = result.request();
+    buf_result.ptr = (double *)TestPrediction.memptr();
+    return result;
+}
 py::array_t<double> List::getVarImp()
 {
     double *prediction_mem = VarImp.memptr();
@@ -87,7 +98,7 @@ py::array_t<double> List::getVarImp()
 //     buf_result.ptr = (double *)TestPrediction.memptr();
 //     return result;
 // }
-py::array_t<double> pythonRegPrediction(py::array_t<double> &testx, List fit)
+List pythonRegPrediction(py::array_t<double> &testx, List fit)
 {
     std::cout << "start to run prediction" << std::endl;
     py::buffer_info buf_testx = testx.request();
@@ -96,18 +107,19 @@ py::array_t<double> pythonRegPrediction(py::array_t<double> &testx, List fit)
     pythonInterfaceClass pythonFriend = pythonInterfaceClass();
 
     // pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
-
-    arma::vec prediction;
-    prediction = pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
+    arma::vec prediction(5, fill::value(123.0));
+    // prediction = pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
 
     std::cout << "prediction result inside C++ is" << prediction << prediction.memptr() << std::endl;
-    // cast result
-    double *prediction_mem = prediction.memptr();
-    auto result = py::array_t<double>(prediction.size());
-    py::buffer_info buf_result = result.request();
-    py::array_t<double> final_result(buf_result);
+    // // cast result
+    // double *prediction_mem = prediction.memptr();
+    // auto result = py::array_t<double>(prediction.size());
+    // py::buffer_info buf_result = result.request();
+    // py::array_t<double> final_result(buf_result);
 
-    return final_result;
+    List ReturnList;
+    ReturnList.TestPrediction = prediction;
+    return ReturnList;
 }
 
 PYBIND11_MODULE(cmake_example, m)
@@ -166,8 +178,8 @@ PYBIND11_MODULE(cmake_example, m)
     List.def(py::init<>())
         .def("getOOBPrediction", &List::getOOBPrediction)
         .def("getPrediction", &List::getPrediction)
-        .def("getVarImp", &List::getVarImp);
-    // .def("getTestPrediction", &List::getTestPrediction)
+        .def("getVarImp", &List::getVarImp)
+        .def("getTestPrediction", &List::getTestPrediction);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);

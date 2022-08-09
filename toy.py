@@ -9,8 +9,12 @@ import pandas as pd
 data = pd.read_csv("cmake_example/boston.csv")
 trainX = data.iloc[:100, :-1].astype("double")
 testX = data.iloc[100:120, :-1].astype("double")
+
+
 trainY =  data.iloc[:100, -1].astype("double")
 testY = data.iloc[100:120, -1].astype("double")
+print("trainY mean", trainY.mean())
+print("testY mean", testY.mean())
 
 # trainX = np.array([[10,12],[9,8],[3,7],[-1,3],[12,13],[0,0],[9,9]]).astype("double")
 
@@ -26,8 +30,8 @@ print("prediction:", fit.getPrediction())
 print("OOB prediction:", fit.getOOBPrediction())
 # print(fit)
 # print(fit.Prediction)
-result = np.array([1,2,3,4,5])
 pred = cmake_example.pythonRegPrediction(testX, fit)
-print(pred)
-print(result)
-print(pred.__array_interface__['data'])
+print("Result on Test Data in Python", pred.getTestPrediction())
+# print(result)
+# print(pred.__array_interface__['data'])
+

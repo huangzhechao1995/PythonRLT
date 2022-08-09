@@ -39,12 +39,14 @@ public:
   arma::umat ObsTrack;
   vec VarImp;
   uvec Ncat;
+  vec TestPrediction;
 
   // List(Reg_Uni_Forest_Class forest);
 
   // getter
   py::array_t<double> getPrediction();
   py::array_t<double> getOOBPrediction();
+  py::array_t<double> getTestPrediction();
   py::array_t<double> getVarImp();
 
   // getter for Forest instance

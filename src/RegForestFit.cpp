@@ -79,6 +79,7 @@ List RegForestUniFit(arma::mat &X,
   uvec obs_id = linspace<uvec>(0, N - 1, N);
   uvec var_id = linspace<uvec>(0, P - 1, P);
 
+  std::cout << "sum REG_DATA.Y" << arma::sum(REG_DATA.Y) << endl;
   // start to fit the model
   Reg_Uni_Forest_Build((const RLT_REG_DATA &)REG_DATA,
                        REG_FOREST,
@@ -142,6 +143,8 @@ int pythonInterfaceWithRandomData(int trainn, int testn, int p, int ntrees)
   arma::mat dummy_X = arma::mat(n, p, fill::randu);
   arma::vec dummy_Y = arma::vec(n, fill::randu);
   arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
+  dummy_Ncat(3) = 1;
+  cout << "dummy_Ncat: " << dummy_Ncat << endl;
   // return importance;
   PARAM_GLOBAL dummy_param = PARAM_GLOBAL(n,
                                           p,
@@ -205,17 +208,19 @@ List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, a
   int p = trainx.n_cols;
   int n = trainn + testn;
   std::cout << n << std::endl;
-  int ncores = 10;
+  int ncores = 4;
   int nmin = 20;
-  int mtry = p;
+  int mtry = int(p / 2);
   double sampleprob = 0.85;
   std::string rule = "best";
-  int nsplit = 0;
+  int nsplit = 3;
   int importance = 1;
 
   //  arma::mat dummy_X = arma::mat(n, p, fill::randu);
   //  arma::vec dummy_Y = arma::vec(n, fill::randu);
   arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
+  dummy_Ncat(3) = 1;
+  cout << "dummy_Ncat: " << dummy_Ncat << endl;
   // return importance;
   PARAM_GLOBAL dummy_param = PARAM_GLOBAL(n,
                                           p,
@@ -223,7 +228,7 @@ List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, a
                                           mtry,
                                           nmin,
                                           0.0, // default
-                                          1,
+                                          3,
                                           1,
                                           nsplit,
                                           true,
