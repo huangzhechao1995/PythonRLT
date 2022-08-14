@@ -287,9 +287,9 @@ arma::vec pythonInterfacePrediction(arma::mat testx, List fit)
                       0,
                       0);
   // std::cout << "Pred predicted successful" << std::endl;
-  arma::vec v(5, fill::value(123.0));
-  std::cout << "prediction result inside C++ pythonCallPredictOnTestData is" << v << v.memptr() << std::endl;
-  return v;
+  arma::vec mean_trees_prediction = arma::mean(Pred, /*dim*/ 1);
+  std::cout << "prediction result inside C++ pythonCallPredictOnTestData is" << mean_trees_prediction << mean_trees_prediction.memptr() << std::endl;
+  return mean_trees_prediction;
 }
 
 //------
