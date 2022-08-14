@@ -6,7 +6,7 @@ import cmake_example
 import numpy as np
 
 import pandas as pd 
-data = pd.read_csv("cmake_example/boston.csv")
+data = pd.read_csv("/root/cmake_example/boston.csv")
 trainX = data.iloc[:100, :-1].astype("double")
 testX = data.iloc[100:120, :-1].astype("double")
 

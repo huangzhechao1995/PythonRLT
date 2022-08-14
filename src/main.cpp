@@ -58,35 +58,39 @@ List pythonRegWithGivenXYReturnList(py::array_t<double> &trainx, py::array_t<dou
 
 py::array_t<double> List::getPrediction()
 {
-    double *prediction_mem = Prediction.memptr();
     auto result = py::array_t<double>(Prediction.size());
-    py::buffer_info buf_result = result.request();
-    buf_result.ptr = (double *)Prediction.memptr();
+    for (int i; i<Prediction.size(); ++i) {
+        result.mutable_at(i) = Prediction[i];
+    }
+    std::cout << "List::getPrediction = " << Prediction << std::endl;
     return result;
 }
 
 py::array_t<double> List::getOOBPrediction()
 {
-    double *prediction_mem = OOBPrediction.memptr();
     auto result = py::array_t<double>(OOBPrediction.size());
-    py::buffer_info buf_result = result.request();
-    buf_result.ptr = (double *)OOBPrediction.memptr();
+    for (int i; i<OOBPrediction.size(); ++i) {
+        result.mutable_at(i) = OOBPrediction[i];
+    }
+    std::cout << "List::getOOBPrediction = " << OOBPrediction << std::endl;
     return result;
 }
 py::array_t<double> List::getTestPrediction()
 {
-    double *prediction_mem = TestPrediction.memptr();
     auto result = py::array_t<double>(TestPrediction.size());
-    py::buffer_info buf_result = result.request();
-    buf_result.ptr = (double *)TestPrediction.memptr();
+    for (int i; i<TestPrediction.size(); ++i) {
+        result.mutable_at(i) = TestPrediction[i];
+    }
+    std::cout << "List::getTestPrediction = " << TestPrediction << std::endl;
     return result;
 }
 py::array_t<double> List::getVarImp()
 {
-    double *prediction_mem = VarImp.memptr();
     auto result = py::array_t<double>(VarImp.size());
-    py::buffer_info buf_result = result.request();
-    buf_result.ptr = (double *)VarImp.memptr();
+    for (int i; i<VarImp.size(); ++i) {
+        result.mutable_at(i) = VarImp[i];
+    }
+    std::cout << "List::getVarImp = " << VarImp << std::endl;
     return result;
 }
 
