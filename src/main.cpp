@@ -59,7 +59,8 @@ List pythonRegWithGivenXYReturnList(py::array_t<double> &trainx, py::array_t<dou
 py::array_t<double> List::getPrediction()
 {
     auto result = py::array_t<double>(Prediction.size());
-    for (int i; i<Prediction.size(); ++i) {
+    for (int i; i < Prediction.size(); ++i)
+    {
         result.mutable_at(i) = Prediction[i];
     }
     std::cout << "List::getPrediction = " << Prediction << std::endl;
@@ -69,7 +70,8 @@ py::array_t<double> List::getPrediction()
 py::array_t<double> List::getOOBPrediction()
 {
     auto result = py::array_t<double>(OOBPrediction.size());
-    for (int i; i<OOBPrediction.size(); ++i) {
+    for (int i; i < OOBPrediction.size(); ++i)
+    {
         result.mutable_at(i) = OOBPrediction[i];
     }
     std::cout << "List::getOOBPrediction = " << OOBPrediction << std::endl;
@@ -78,7 +80,8 @@ py::array_t<double> List::getOOBPrediction()
 py::array_t<double> List::getTestPrediction()
 {
     auto result = py::array_t<double>(TestPrediction.size());
-    for (int i; i<TestPrediction.size(); ++i) {
+    for (int i; i < TestPrediction.size(); ++i)
+    {
         result.mutable_at(i) = TestPrediction[i];
     }
     std::cout << "List::getTestPrediction = " << TestPrediction << std::endl;
@@ -87,7 +90,8 @@ py::array_t<double> List::getTestPrediction()
 py::array_t<double> List::getVarImp()
 {
     auto result = py::array_t<double>(VarImp.size());
-    for (int i; i<VarImp.size(); ++i) {
+    for (int i; i < VarImp.size(); ++i)
+    {
         result.mutable_at(i) = VarImp[i];
     }
     std::cout << "List::getVarImp = " << VarImp << std::endl;
@@ -111,8 +115,8 @@ List pythonRegPrediction(py::array_t<double> &testx, List fit)
     pythonInterfaceClass pythonFriend = pythonInterfaceClass();
 
     // pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
-    arma::vec prediction(5, fill::value(123.0));
-    // prediction = pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
+    // arma::vec prediction(5, fill::value(123.0));
+    arma::vec prediction = pythonFriend.pythonCallPredictOnTestData(mat_testx, fit);
 
     std::cout << "prediction result inside C++ is" << prediction << prediction.memptr() << std::endl;
     // // cast result
