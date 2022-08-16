@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4...3.18)
-project(cmake_example)
+project(pythonrlt)
 
 add_subdirectory(pybind11)
 set(CMAKE_CXX_STANDARD 11)
@@ -29,30 +29,20 @@ set(SOURCES
 
 find_package(Armadillo REQUIRED)
 message(STATUS "ARMADILLO_INCLUDE_DIR is ${ARMADILLO_INCLUDE_DIR}")
-#add_executable(
-#    cmake_example
-#    ${SOURCES}
-#    )
-#target_include_directories(
-#    cmake_example
-#    PUBLIC
-#    ${ARMADILLO_INCLUDE_DIR}
-#)
-#target_link_libraries(cmake_example ${ARMADILLO_LIBRARIES})
 
-pybind11_add_module(cmake_example MODULE ${SOURCES} )
 
-target_link_libraries(cmake_example PRIVATE ${ARMADILLO_LIBRARIES})
+pybind11_add_module(pythonrlt MODULE ${SOURCES} )
+
+target_link_libraries(pythonrlt PRIVATE ${ARMADILLO_LIBRARIES})
 
 target_include_directories(
-    cmake_example
+    pythonrlt
     PUBLIC
     ${SOURCE}
     ${ARMADILLO_INCLUDE_DIR}
 )
-#target_link_libraries(cmake_example ${ARMADILLO_INCLUDE_DIR})
 
 
 # EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.
-target_compile_definitions(cmake_example PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO})
+target_compile_definitions(pythonrlt PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO})

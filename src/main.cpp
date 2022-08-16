@@ -130,13 +130,13 @@ List pythonRegPrediction(py::array_t<double> &testx, List fit)
     return ReturnList;
 }
 
-PYBIND11_MODULE(cmake_example, m)
+PYBIND11_MODULE(pythonrlt, m)
 {
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
 
-        .. currentmodule:: cmake_example
+        .. currentmodule:: pythonrlt
 
         .. autosummary::
            :toctree: _generate
