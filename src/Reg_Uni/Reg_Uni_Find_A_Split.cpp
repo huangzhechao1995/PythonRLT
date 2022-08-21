@@ -64,6 +64,8 @@ void Reg_Uni_Find_A_Split(Uni_Split_Class &OneSplit,
                         nmin,
                         alpha,
                         useobsweight);
+      std::cout << "    --- split gen " << split_gen << " split rule " << split_rule << std::endl;
+      std::cout << "    --- try var " << temp_var << " at cut " << TempSplit.value << " (categorical) with score " << TempSplit.score << std::endl;
     }
     else
     { // continuous variable
