@@ -141,23 +141,12 @@ PYBIND11_MODULE(pythonrlt, m)
         .. autosummary::
            :toctree: _generate
 
-           
-           subtract
     )pbdoc";
 
     m.def("add", &add, R"pbdoc(
         Add two numbers
 
         Some other explanation about the add function.
-    )pbdoc");
-
-    m.def(
-        "subtract", [](int i, int j)
-        { return i - j; },
-        R"pbdoc(
-        Subtract two numbers
-
-        Some other explanation about the subtract function.
     )pbdoc");
 
     m.def(
