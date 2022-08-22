@@ -11,11 +11,11 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.fixture()
-def test_csv():
-    data = pd.read_csv(TEST_DIR / "data/test.csv")
+def trainY_csv():
+    data = pd.read_csv(TEST_DIR / "data/trainY.csv")
     yield data.astype("double")
 
 @pytest.fixture()
-def train_csv():
-    data = pd.read_csv(TEST_DIR / "data/train.csv")
+def trainX_csv():
+    data = pd.read_csv(TEST_DIR / "data/trainX.csv")
     yield data.astype("double")

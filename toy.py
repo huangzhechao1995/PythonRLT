@@ -6,6 +6,11 @@ import cmake_example
 import numpy as np
 
 import pandas as pd 
+
+# trainX = pd.read_csv("./tests/data/trainX.csv")
+# print(trainX.shape)
+
+
 data = pd.read_csv("/root/cmake_example/boston.csv")
 trainX = data.iloc[:400, :-1].astype("double")
 testX = data.iloc[400:, :-1].astype("double")
@@ -24,7 +29,8 @@ print("testY mean", testY.mean())
 # testY = np.array([11,8]).astype("double")
 
 
-fit = cmake_example.pythonRegWithGivenXYReturnList(trainX, trainY, testX, testY, 20)
+
+fit = cmake_example.pythonRegWithGivenXYReturnList(trainX, trainY, 20)
 print("variable Importance:", fit.getVarImp())
 print("prediction:", fit.getPrediction())
 print("OOB prediction:", fit.getOOBPrediction())
