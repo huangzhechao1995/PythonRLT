@@ -11,47 +11,28 @@ int add(int i, int j)
 }
 using namespace arma;
 
-List pythonRegWithGivenXYReturnList(py::array_t<double> &trainx, py::array_t<double> &trainy, py::array_t<double> &testx, py::array_t<double> &testy, int ntrees)
+List pythonRegWithGivenXYReturnList(py::array_t<double> &trainx, py::array_t<double> &trainy, int ntrees)
 {
     py::buffer_info buf_trainx = trainx.request();
     py::buffer_info buf_trainy = trainy.request();
-    py::buffer_info buf_testx = testx.request();
-    py::buffer_info buf_testy = testy.request();
-    if (buf_trainx.ndim != 2 || buf_testx.ndim != 2)
-    {
-        throw std::runtime_error("numpy.ndarray dims for X  must be 2!");
-    }
-    if (buf_trainy.ndim != 1 || buf_testy.ndim != 1)
-    {
-        throw std::runtime_error("numpy.ndarray dims for y must be 2!");
-    }
+
     if ((buf_trainx.shape[0] != buf_trainy.shape[0]))
     {
         throw std::runtime_error("length of train X and train Y must be match!");
     }
-    if ((buf_testx.shape[0] != buf_testy.shape[0]))
-    {
-        throw std::runtime_error("length of testX and testY must be match!");
-    }
+
     double *ptr_trainx = (double *)buf_trainx.ptr;
     double *ptr_trainy = (double *)buf_trainy.ptr;
-
-    double *ptr_testx = (double *)buf_testx.ptr;
-    double *ptr_testy = (double *)buf_testy.ptr;
 
     arma::mat mat_trainx = arma::mat(ptr_trainx, buf_trainx.shape[0], buf_trainx.shape[1], true, false);
     arma::vec vec_trainy = arma::vec(ptr_trainy, buf_trainy.shape[0], true, false);
 
-    arma::mat mat_testx = arma::mat(ptr_testx, buf_testx.shape[0], buf_testx.shape[1], true, false);
-    arma::vec vec_testy = arma::vec(ptr_testy, buf_testy.shape[0], true, false);
-
     // verification
     std::cout << "train y mean in C++" << arma::sum(vec_trainy) << std::endl;
-    std::cout << "test y mean in C++" << arma::sum(vec_testy) << std::endl;
 
     pythonInterfaceClass pythonFriend = pythonInterfaceClass();
 
-    List result = pythonFriend.pythonCallWithGivenTrainTestDataReturnList(mat_trainx, vec_trainy, mat_testx, vec_testy, ntrees);
+    List result = pythonFriend.pythonCallWithGivenTrainTestDataReturnList(mat_trainx, vec_trainy, ntrees);
 
     return result;
 }
@@ -162,7 +143,7 @@ PYBIND11_MODULE(pythonrlt, m)
     )pbdoc");
 
     m.def("pythonRegWithGivenXYReturnList", &pythonRegWithGivenXYReturnList, R"pbdoc(
-        Pass in trainX, testX, trainY, testY
+        Pass in trainX, trainY
     )pbdoc");
 
     m.def("pythonRegPrediction", &pythonRegPrediction, R"pbdoc(

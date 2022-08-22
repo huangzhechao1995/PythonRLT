@@ -193,7 +193,7 @@ int pythonInterfaceWithRandomData(int trainn, int testn, int p, int ntrees)
 //                                        forest.SplitValueList, forest.LeftNodeList, forest.RightNodeList,
 //                                        forest.NodeSizeList, forest.NodeAveList);
 // }
-List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees)
+List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, int ntrees)
 {
   // from
   // int trainn = 500;
@@ -204,12 +204,11 @@ List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, a
   // int ntrees = 200;
 
   int trainn = trainx.n_rows;
-  int testn = testx.n_rows;
   int p = trainx.n_cols;
-  int n = trainn + testn;
+  int n = trainn;
   std::cout << n << std::endl;
-  int ncores = 4;
-  int nmin = 20;
+  int ncores = 1;
+  int nmin = 10;
   int mtry = int(p / 2);
   double sampleprob = 0.85;
   std::string rule = "best";
@@ -219,28 +218,29 @@ List pythonInterfaceWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, a
   //  arma::mat dummy_X = arma::mat(n, p, fill::randu);
   //  arma::vec dummy_Y = arma::vec(n, fill::randu);
   arma::uvec dummy_Ncat = arma::uvec(p, fill::zeros);
-  dummy_Ncat(3) = 1;
+  for (int i = p / 2; i < p; i++)
+    dummy_Ncat(i) = 1;
   cout << "dummy_Ncat: " << dummy_Ncat << endl;
   // return importance;
-  PARAM_GLOBAL dummy_param = PARAM_GLOBAL(n,
-                                          p,
-                                          ntrees,
-                                          mtry,
-                                          nmin,
-                                          0.0, // default
-                                          3,
-                                          1,
-                                          nsplit,
-                                          true,
-                                          sampleprob,
-                                          false,
-                                          false,
-                                          1,
-                                          1,
-                                          false,
-                                          false,
-                                          312,
-                                          false);
+  PARAM_GLOBAL dummy_param = PARAM_GLOBAL(n,          // N_input
+                                          p,          // P_input
+                                          ntrees,     // ntrees_input
+                                          mtry,       /*mtry_input*/
+                                          nmin,       /*nmin_input*/
+                                          0.0,        /*alpha_input*/
+                                          3,          /*split_gen_input*/
+                                          1,          // split_rule
+                                          nsplit,     // nsplit
+                                          true,       // replacement
+                                          sampleprob, // resample_prob
+                                          false,      // useobsweight
+                                          false,      // usevarweight
+                                          1,          // varweighttype
+                                          1,          // importance
+                                          false,      // reinforcement
+                                          false,      // obs_track
+                                          1,          // seed
+                                          false);     // failcount
   std::cout << "dummy_param.N: " << dummy_param.N << std::endl;
   std::cout << "dummy_param.P: " << dummy_param.P << std::endl;
 
@@ -294,9 +294,9 @@ arma::vec pythonInterfacePrediction(arma::mat testx, List fit)
 
 //------
 
-int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int testn, int p, int ntrees)
+int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int p, int ntrees)
 {
-  int result = pythonInterfaceWithRandomData(trainn, testn, p, ntrees);
+  int result = pythonInterfaceWithRandomData(trainn, p, ntrees);
   return result;
 }
 
@@ -306,9 +306,9 @@ int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int testn, int p,
 //   return prediction;
 // }
 
-List pythonInterfaceClass::pythonCallWithGivenTrainTestDataReturnList(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees)
+List pythonInterfaceClass::pythonCallWithGivenTrainTestDataReturnList(arma::mat trainx, arma::vec trainy, int ntrees)
 {
-  List result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, testx, testy, ntrees);
+  List result = pythonInterfaceWithGivenTrainTestData(trainx, trainy, ntrees);
   return result;
 }
 
