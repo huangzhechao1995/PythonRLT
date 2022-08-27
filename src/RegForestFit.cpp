@@ -294,9 +294,9 @@ arma::vec pythonInterfacePrediction(arma::mat testx, List fit)
 
 //------
 
-int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int p, int ntrees)
+int pythonInterfaceClass::pythonCallWithRandomData(int trainn, int testn, int p, int ntrees)
 {
-  int result = pythonInterfaceWithRandomData(trainn, p, ntrees);
+  int result = pythonInterfaceWithRandomData(trainn, testn, p, ntrees);
   return result;
 }
 
