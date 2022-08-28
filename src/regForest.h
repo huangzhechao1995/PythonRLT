@@ -229,7 +229,7 @@ void Reg_Uni_Forest_Pred(mat &Pred,
 class pythonInterfaceClass
 {
 public:
-  int pythonCallWithRandomData(int trainn, int testn, int p, int ntrees);
+  int pythonCallWithRandomData(int trainn, int p, int ntrees);
   // int pythonCallwithGivenTrainTestData(double* trainx, double* trainy, double* testx, double *testy, int ntrees);
   //  arma::vec pythonCallWithGivenTrainTestData(arma::mat trainx, arma::vec trainy, arma::mat testx, arma::vec testy, int ntrees);
   List pythonCallWithGivenTrainTestDataReturnList(arma::mat trainx, arma::vec trainy, int ntrees);
