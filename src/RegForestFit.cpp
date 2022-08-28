@@ -122,12 +122,12 @@ List RegForestUniFit(arma::mat &X,
   return ReturnList;
 }
 
-int pythonInterfaceWithRandomData(int trainn, int testn, int p, int ntrees)
+int pythonInterfaceWithRandomData(int trainn, int p, int ntrees)
 {
   // from
   // int trainn = 500;
   // int testn = 1000;
-  int n = trainn + testn;
+  int n = trainn;
   std::cout << n << std::endl;
   // int p = 100;
   // int X1 = matrix(rnorm(n*p/2), n, p/2)

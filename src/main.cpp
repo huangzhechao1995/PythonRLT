@@ -131,10 +131,10 @@ PYBIND11_MODULE(pythonrlt, m)
     )pbdoc");
 
     m.def(
-        "pythonInterface", [](int trainn, int testn, int p, int ntrees)
+        "pythonInterface", [](int trainn, int p, int ntrees)
         {
             pythonInterfaceClass pythonFriend = pythonInterfaceClass();
-            int result = pythonFriend.pythonCallWithRandomData(trainn, testn, p, ntrees);
+            int result = pythonFriend.pythonCallWithRandomData(trainn, p, ntrees);
             return result; },
         R"pbdoc(
         Call RLT

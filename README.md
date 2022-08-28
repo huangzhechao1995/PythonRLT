@@ -1,9 +1,12 @@
 # reinforcement learning trees python pacakge
 command to install the RLT python package: 
-```pip3 install cmake_example/.```
+```pip install -e . --verbose```
 
 example command to run the RLT python package
 ```python3 toy.py```
+
+example command to run test
+```pytest -o log_cli=true -o log_cli_level="DEBUG" tests```
 
 # cmake_example for pybind11
 
